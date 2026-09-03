@@ -1,0 +1,1168 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Academic Supervision · Dean's Dashboard</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#F3F4F6;
+  --card:#FFFFFF;
+  --border:#E5E7EB;
+  --ink:#111318;
+  --ink-soft:#6B7280;
+  --ink-faint:#9CA3AF;
+  --dark:#14161C;
+  --dark-2:#1E212B;
+  --orange-1:#FDB255;
+  --orange-2:#F5920E;
+  --orange-text:#7A4A05;
+  --green:#16A34A;
+  --green-soft:#EAF8EF;
+  --amber:#D97706;
+  --amber-soft:#FEF3E2;
+  --closed:#9CA3AF;
+  --closed-soft:#F1F2F4;
+  --font: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+}
+*{box-sizing:border-box;}
+html,body{margin:0;padding:0;}
+body{background:var(--bg); color:var(--ink); font-family:var(--font); min-height:100vh;}
+button,input,select{font-family:inherit;}
+button{cursor:pointer;}
+:focus-visible{outline:3px solid var(--orange-2); outline-offset:2px;}
+svg{display:block;}
+.app{max-width:1360px; margin:0 auto; padding-bottom:60px;}
+
+/* ---------- Topbar ---------- */
+.topbar{
+  background:var(--card); border-bottom:1px solid var(--border);
+  display:flex; align-items:center; gap:20px; flex-wrap:wrap;
+  padding:16px 24px;
+}
+.brand{display:flex; align-items:center; gap:12px; margin-right:auto;}
+.brand-icon{
+  width:46px; height:46px; border-radius:10px; background:var(--dark);
+  color:#fff; display:flex; align-items:center; justify-content:center; flex-shrink:0;
+}
+.brand-text h1{margin:0; font-size:19px; font-weight:700; letter-spacing:-0.01em;}
+.brand-text p{margin:1px 0 0; font-size:12.5px; color:var(--ink-soft);}
+
+.time-controls{display:flex; align-items:center; gap:8px; flex-wrap:wrap;}
+.field{
+  display:flex; align-items:center; gap:7px; border:1px solid var(--border); border-radius:9px;
+  padding:8px 12px; background:var(--card); color:var(--ink-soft);
+}
+.field input{border:none; outline:none; background:transparent; font-size:13.5px; color:var(--ink); font-weight:500;}
+.icon-btn{
+  width:36px; height:36px; border-radius:9px; border:1px solid var(--border); background:var(--card);
+  color:var(--ink-soft); display:flex; align-items:center; justify-content:center;
+}
+.icon-btn:hover{background:var(--bg);}
+.pill-btn{
+  border:1px solid var(--border); background:var(--card); color:var(--ink);
+  border-radius:9px; padding:8px 14px; font-size:13px; font-weight:600;
+}
+.pill-btn:hover{background:var(--bg);}
+.pill-btn.active{background:var(--dark); color:#fff; border-color:var(--dark);}
+
+/* ---------- Status bar ---------- */
+.statusbar{
+  display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:12px;
+  padding:16px 24px 0;
+}
+.statusbar .now-label{font-size:15px; font-weight:600;}
+.statusbar .now-label span{color:var(--ink-soft); font-weight:500;}
+.view-toggle{display:flex; gap:10px;}
+.view-btn{
+  display:flex; align-items:center; gap:7px; border:1px solid var(--border); background:var(--card);
+  color:var(--ink); border-radius:9px; padding:9px 15px; font-size:13.5px; font-weight:600;
+}
+.view-btn.active{background:var(--dark); color:#fff; border-color:var(--dark);}
+.view-btn:not(.active):hover{background:var(--bg);}
+
+/* ---------- Floor tabs ---------- */
+.floor-tabs{
+  display:grid; grid-template-columns:repeat(6,1fr); gap:10px; padding:18px 24px 0;
+}
+.floor-tab{
+  border:1px solid var(--border); background:var(--card); border-radius:10px;
+  padding:11px 14px; text-align:left;
+}
+.floor-tab .l1{display:block; font-size:11.5px; color:var(--ink-soft); font-weight:600;}
+.floor-tab .l2{display:block; font-size:14px; font-weight:700; margin-top:2px;}
+.floor-tab.active{background:var(--dark); border-color:var(--dark);}
+.floor-tab.active .l1{color:#B8BCC8;}
+.floor-tab.active .l2{color:#fff;}
+.floor-tab:not(.active):hover{border-color:var(--ink-faint);}
+
+/* ---------- Banner ---------- */
+.banner{
+  margin:18px 24px 0; border-radius:14px; padding:26px 28px;
+  background:linear-gradient(135deg, var(--orange-1), var(--orange-2));
+  display:flex; align-items:center; gap:16px; color:#fff;
+  box-shadow:0 14px 30px -16px rgba(245,146,14,0.65);
+}
+.banner-icon{
+  width:48px; height:48px; border-radius:10px; background:rgba(255,255,255,0.22);
+  display:flex; align-items:center; justify-content:center; flex-shrink:0;
+}
+.banner h2{margin:0; font-size:22px; font-weight:700;}
+.banner p{margin:2px 0 0; font-size:14px; opacity:0.92; font-weight:500;}
+
+/* ---------- Sections ---------- */
+.section{margin:18px 24px 0; background:var(--card); border:1px solid var(--border); border-radius:14px; padding:20px;}
+.section-head{display:flex; align-items:center; gap:10px; margin-bottom:16px;}
+.section-head .sicon{color:var(--ink-soft);}
+.section-head h3{margin:0; font-size:15.5px; font-weight:700;}
+.tag{
+  font-size:11px; font-weight:600; color:var(--ink-soft); background:var(--bg);
+  border:1px solid var(--border); padding:3px 9px; border-radius:20px;
+}
+.room-grid{display:grid; grid-template-columns:repeat(auto-fill, minmax(150px,1fr)); gap:14px;}
+
+.tile{
+  border-radius:11px; padding:13px 14px; text-align:left; border:1px solid var(--border);
+  background:var(--card); min-height:88px; display:flex; flex-direction:column;
+  transition:transform .1s ease, box-shadow .15s ease;
+}
+.tile:hover{transform:translateY(-2px); box-shadow:0 10px 20px -12px rgba(17,19,24,0.28);}
+.tile-top{display:flex; align-items:center; justify-content:space-between; margin-bottom:6px;}
+.tile-room{font-size:14.5px; font-weight:700;}
+.tile-sub{font-size:12.5px; line-height:1.35; margin-top:auto;}
+
+.tile.vacant{background:var(--card);}
+.tile.vacant .tile-room{color:var(--ink);}
+.tile.vacant .tile-sub{color:var(--ink-faint);}
+.tile.vacant .status-icon{color:var(--green);}
+
+.tile.occupied{
+  background:linear-gradient(135deg, var(--orange-1), var(--orange-2)); border-color:transparent;
+}
+.tile.occupied .tile-room{color:#fff;}
+.tile.occupied .status-dot{width:8px; height:8px; border-radius:50%; background:#fff;}
+.tile.occupied .who{color:#fff; font-weight:700; font-size:12.5px;}
+.tile.occupied .subj{color:rgba(255,255,255,0.92); font-size:12px; margin-top:1px;}
+.tile.occupied .time{color:rgba(255,255,255,0.82); font-size:11px; margin-top:4px;}
+.tile.occupied .edited-flag{
+  display:inline-block; margin-top:5px; font-size:9.5px; font-weight:700; letter-spacing:0.06em;
+  background:rgba(255,255,255,0.25); padding:2px 6px; border-radius:5px; color:#fff; text-transform:uppercase;
+}
+.tile.occupied .count-badge{
+  font-size:9.5px; font-weight:700; letter-spacing:0.04em;
+  background:rgba(255,255,255,0.28); padding:2px 7px; border-radius:20px; color:#fff;
+}
+
+.tile.break{background:var(--amber-soft); border-color:#F3D9A8;}
+.tile.break .tile-room{color:var(--ink);}
+.tile.break .tile-sub{color:var(--amber); font-weight:600;}
+.tile.break .status-icon{color:var(--amber);}
+
+.tile.closed{background:var(--closed-soft); border-color:var(--border); opacity:0.8;}
+.tile.closed .tile-room{color:var(--ink-soft);}
+.tile.closed .tile-sub{color:var(--closed);}
+.tile.closed .status-icon{color:var(--closed);}
+
+.empty-msg{font-size:13.5px; color:var(--ink-soft); padding:20px 4px;}
+
+/* ---------- Detail panel ---------- */
+.scrim{position:fixed; inset:0; background:rgba(17,19,24,0.45); opacity:0; pointer-events:none; transition:opacity .2s ease; z-index:40;}
+.scrim.show{opacity:1; pointer-events:auto;}
+.detail-panel{
+  position:fixed; top:0; right:0; height:100%; width:400px; max-width:92vw;
+  background:var(--card); box-shadow:-14px 0 40px -18px rgba(0,0,0,0.5);
+  transform:translateX(100%); transition:transform .25s ease; z-index:50;
+  overflow-y:auto; padding:24px;
+}
+.detail-panel.show{transform:translateX(0);}
+.close-btn{
+  position:absolute; top:16px; right:16px; width:32px; height:32px; border-radius:50%;
+  border:1px solid var(--border); background:var(--card); color:var(--ink);
+  display:flex; align-items:center; justify-content:center;
+}
+.close-btn:hover{background:var(--bg);}
+
+.d-room{font-size:24px; font-weight:800; margin:6px 0 2px;}
+.d-dept{font-size:13px; color:var(--ink-soft); margin-bottom:18px; font-weight:500;}
+.d-plate{
+  border-radius:9px; padding:12px 14px; margin-bottom:18px; font-size:12px; font-weight:700;
+  letter-spacing:0.04em; text-transform:uppercase;
+}
+.d-plate.occupied{background:linear-gradient(135deg, var(--orange-1), var(--orange-2)); color:#fff;}
+.d-plate.vacant{background:var(--green-soft); color:var(--green);}
+.d-plate.break{background:var(--amber-soft); color:var(--amber);}
+.d-plate.closed{background:var(--closed-soft); color:var(--closed);}
+
+.d-field{margin-bottom:12px;}
+.d-label{font-size:10.5px; font-weight:700; letter-spacing:0.08em; text-transform:uppercase; color:var(--ink-faint); margin-bottom:3px;}
+.d-value{font-size:14.5px; font-weight:600; color:var(--ink);}
+.d-msg{font-size:13.5px; color:var(--ink-soft); line-height:1.55; margin-bottom:10px;}
+.d-next{
+  margin-top:14px; padding:12px 14px; background:var(--bg); border-radius:8px;
+  border:1px dashed var(--border); font-size:12.5px; color:var(--ink-soft); line-height:1.55;
+}
+.d-next b{color:var(--ink);}
+.d-nav{display:flex; gap:8px; margin:18px 0 4px;}
+.d-nav button{
+  flex:1; background:var(--bg); border:1px solid var(--border); border-radius:8px;
+  padding:10px; font-size:12.5px; font-weight:600; color:var(--ink);
+}
+.d-nav button:hover{background:var(--border);}
+.d-nav button#saveEditBtn, .d-nav button#addClassBtn, .d-nav button#addAnotherBtn{background:var(--dark); color:#fff; border-color:var(--dark);}
+.d-nav button#saveEditBtn:hover, .d-nav button#addClassBtn:hover, .d-nav button#addAnotherBtn:hover{background:var(--dark-2);}
+.d-hr{border:none; border-top:1px solid var(--border); margin:18px 0;}
+.d-controls-label{font-size:13px; font-weight:700; margin-bottom:10px;}
+.d-inputs{display:flex; gap:8px;}
+.d-inputs input, .d-field select, .d-field input[type=text]{
+  flex:1; font-size:13px; padding:9px 10px; border-radius:8px; border:1px solid var(--border);
+  background:var(--card); width:100%; color:var(--ink);
+}
+
+/* ---------- Class cards (multiple classes sharing one slot) ---------- */
+.class-card{
+  border:1px solid var(--border); border-radius:10px; padding:14px; margin-bottom:12px; background:var(--bg);
+}
+.class-card-head{display:flex; align-items:center; justify-content:space-between; margin-bottom:8px;}
+.class-card-head .cc-index{
+  font-size:10.5px; font-weight:700; letter-spacing:0.06em; text-transform:uppercase; color:var(--ink-faint);
+}
+.class-card .d-field{margin-bottom:8px;}
+.class-card-actions{display:flex; gap:8px; margin-top:10px;}
+.class-card-actions button{
+  flex:1; background:var(--card); border:1px solid var(--border); border-radius:7px;
+  padding:8px; font-size:12px; font-weight:600; color:var(--ink);
+}
+.class-card-actions button:hover{background:var(--border);}
+.class-card-actions button.remove-btn{color:#B42318;}
+
+/* ---------- Responsive ---------- */
+@media (max-width:920px){
+  .floor-tabs{grid-template-columns:repeat(3,1fr);}
+}
+@media (max-width:640px){
+  .floor-tabs{grid-template-columns:repeat(2,1fr); padding:14px 14px 0;}
+  .topbar,.statusbar,.section{padding-left:14px; padding-right:14px;}
+  .banner{margin:16px 14px 0;}
+  .section{margin:16px 14px 0;}
+  .detail-panel{width:100%; max-width:100%;}
+  .brand-text p{display:none;}
+}
+
+/* Responsive improvements for tablet and mobile */
+@media (max-width:1024px){
+  .detail-panel{width:360px;}
+  .floor-tabs{grid-template-columns:repeat(4,1fr);}
+}
+
+@media (max-width:820px){
+  .topbar{padding:12px; align-items:flex-start;}
+  .time-controls{flex:1 1 100%; margin-top:8px;}
+  #globalSearchInput{width:100%; margin-top:8px;}
+  #globalSearchBtn{width:100%; margin-top:8px;}
+  .brand-text h1{font-size:17px;}
+  .floor-tabs{grid-template-columns:repeat(3,1fr);}
+  .room-grid{grid-template-columns:repeat(auto-fill,minmax(130px,1fr));}
+  .tile{min-height:72px; padding:10px;}
+  .d-inputs{flex-direction:column;}
+  .d-nav button{padding:12px;}
+}
+
+@media (max-width:480px){
+  .brand{width:100%; margin-bottom:8px;}
+  .time-controls{order:3; width:100%;}
+  #globalSearchInput{order:2; width:100%;}
+  #globalSearchBtn{order:4; width:100%;}
+  .topbar{gap:8px;}
+  .floor-tabs{grid-template-columns:repeat(2,1fr);}
+  .room-grid{grid-template-columns:repeat(auto-fill,minmax(120px,1fr));}
+  #loginModal>div{width:92vw; padding:16px;}
+  .banner h2{font-size:18px;}
+  .detail-panel{width:100%; max-width:100%;}
+  .time-controls .field{flex:1 1 auto;}
+  .pill-btn{padding:8px 10px;}
+}
+
+/* Make login modal responsive */
+#loginModal > div{width:360px;}
+
+/* Ensure search input doesn't overflow */
+#globalSearchInput{min-width:160px;}
+#globalSearchBtn{white-space:nowrap;}
+</style>
+</head>
+<body>
+<div class="app">
+
+  <header class="topbar">
+    <div class="brand">
+      <div class="brand-icon">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m22 10-10-5L2 10l10 5 10-5Z"/><path d="M6 12v5c0 1.5 3 3 6 3s6-1.5 6-3v-5"/></svg>
+      </div>
+      <div class="brand-text">
+        <h1>Academic Supervision</h1>
+        <p>Dean's Dashboard — Class &amp; Lab Monitoring</p>
+      </div>
+    </div>
+    <div class="time-controls">
+      <label class="field">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></svg>
+        <input type="date" id="dateInput">
+      </label>
+      <label class="field">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>
+        <input type="time" id="timeInput" step="60">
+      </label>
+      <button class="icon-btn" id="prevDayBtn" aria-label="Previous day">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m15 18-6-6 6-6"/></svg>
+      </button>
+      <button class="pill-btn" id="minus30Btn">-30m</button>
+      <button class="pill-btn active" id="nowBtn">Now</button>
+      <button class="pill-btn" id="plus30Btn">+30m</button>
+      <button class="icon-btn" id="nextDayBtn" aria-label="Next day">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m9 18 6-6-6-6"/></svg>
+      </button>
+    </div>
+    <div style="margin-left:12px; display:flex; align-items:center; gap:8px;">
+      <input id="globalSearchInput" placeholder="Search room (e.g. AC101 or MB201)" style="padding:8px 10px; border-radius:8px; border:1px solid var(--border);">
+      <button class="pill-btn" id="globalSearchBtn">Search</button>
+    </div>
+  </header>
+
+  <!-- Login modal for roles -->
+  <div id="loginModal" style="position:fixed; inset:0; display:flex; align-items:center; justify-content:center; background:rgba(0,0,0,0.4); z-index:60;">
+    <div style="width:360px; background:var(--card); border-radius:12px; padding:20px; box-shadow:0 10px 30px rgba(0,0,0,0.25);">
+      <h3 style="margin:0 0 10px;">Sign in</h3>
+      <div style="font-size:13px; color:var(--ink-soft); margin-bottom:12px;">Choose your role to enter the dashboard.</div>
+      <div style="display:flex; gap:8px; margin-bottom:10px;"><select id="roleSelect" style="flex:1; padding:9px; border-radius:8px; border:1px solid var(--border);"><option value="Dean">Academic Dean</option><option value="Principal">Principal</option><option value="Admin">Administrator</option></select>
+      <input id="userNameInput" placeholder="Your name (optional)" style="flex:1; padding:9px; border-radius:8px; border:1px solid var(--border);"></div>
+      <div style="display:flex; gap:8px; justify-content:flex-end;"><button id="loginBtn" class="pill-btn">Enter</button></div>
+    </div>
+  </div>
+
+  <!-- Search results modal (shows multiple matches like AC404 and MB404) -->
+  <div id="searchResultsModal" style="position:fixed; inset:0; display:none; align-items:center; justify-content:center; background:rgba(0,0,0,0.45); z-index:70;">
+    <div style="width:360px; background:var(--card); border-radius:12px; padding:16px; box-shadow:0 10px 30px rgba(0,0,0,0.25);">
+      <h4 style="margin:0 0 10px;">Search results</h4>
+      <div id="searchResultsList" style="display:flex; flex-direction:column; gap:8px; max-height:320px; overflow:auto; margin-bottom:12px;"></div>
+      <div style="display:flex; gap:8px; justify-content:flex-end;"><button id="closeSearchResults" class="pill-btn">Close</button></div>
+    </div>
+  </div>
+
+  <div class="statusbar">
+    <div class="now-label" id="nowLabel">—</div>
+    <div class="view-toggle">
+      <button class="view-btn active" id="floorViewBtn">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/></svg>
+        Floor View
+      </button>
+      <button class="view-btn" id="emptyViewBtn">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="2" width="16" height="20" rx="1"/><path d="M9 22v-4h6v4M9 7h1M14 7h1M9 11h1M14 11h1M9 15h1M14 15h1"/></svg>
+        Empty Rooms
+      </button>
+    </div>
+  </div>
+
+  <nav class="floor-tabs" id="floorTabs"></nav>
+
+  <div class="banner" id="banner"></div>
+
+  <main id="mainContent"></main>
+
+</div>
+
+<div class="scrim" id="scrim"></div>
+<aside class="detail-panel" id="detailPanel">
+  <button class="close-btn" id="closeDetail">×</button>
+  <div id="detailContent"></div>
+</aside>
+
+<script>
+// Role-based login state
+let role = null;
+let userName = '';
+const loginModal = document.getElementById('loginModal');
+const roleSelect = document.getElementById('roleSelect');
+const userNameInput = document.getElementById('userNameInput');
+const loginBtn = document.getElementById('loginBtn');
+
+function showLogin(){ loginModal.style.display = 'flex'; }
+function hideLogin(){ loginModal.style.display = 'none'; }
+loginBtn.addEventListener('click', () => {
+  role = roleSelect.value;
+  userName = userNameInput.value.trim();
+  sessionStorage.setItem('asch_role', role);
+  sessionStorage.setItem('asch_user', userName || '');
+  hideLogin();
+  renderRoleBanner();
+});
+
+function restoreRole(){ const r = sessionStorage.getItem('asch_role'); const u = sessionStorage.getItem('asch_user'); if(r){ role = r; userName = u||''; hideLogin(); renderRoleBanner(); } else showLogin(); }
+
+function renderRoleBanner(){ const b = document.querySelector('.brand-text p'); if(role){ b.textContent = `${role} · ${userName||'—'}`; } else b.textContent = `Dean's Dashboard — Class & Lab Monitoring`; }
+
+// Global search handling — accept `AC404`, `MB404` or just `404`
+const globalSearchInput = document.getElementById('globalSearchInput');
+const globalSearchBtn = document.getElementById('globalSearchBtn');
+globalSearchBtn.addEventListener('click', () => {
+  const raw = globalSearchInput.value || '';
+  const qOrig = raw.trim();
+  const q = qOrig.toUpperCase().replace(/\s+/g,'');
+  if(!q) return;
+
+  const allRoomsForFloor = f => acRooms(f).concat(mbRooms(f));
+  let found = null;
+
+  // If user typed a building prefix, look for exact match across floors
+  const matches = [];
+  if(q.startsWith('AC') || q.startsWith('MB')){
+    for(const f of FLOORS){
+      const arr = allRoomsForFloor(f);
+      const match = arr.find(r => r.toUpperCase() === q);
+      if(match) matches.push({room:match, floor:f});
+    }
+  } else {
+    // Numeric or short identifier: search across all floors for any room
+    for(const f of FLOORS){
+      const arr = allRoomsForFloor(f);
+      for(const r of arr){
+        const ru = r.toUpperCase();
+        if(ru === q || ru.endsWith(q)) matches.push({room:r, floor:f});
+      }
+    }
+  }
+
+  if(matches.length === 0){
+    alert('Room not found: ' + qOrig);
+    return;
+  }
+
+  if(matches.length === 1){
+    const m = matches[0];
+    floor = m.floor;
+    renderAll();
+    const building = m.room.startsWith('AC') ? 'AC' : 'MB';
+    setTimeout(() => openDetail(building, m.room), 80);
+    return;
+  }
+
+  // Multiple matches: show chooser modal with all matches (e.g., AC404 & MB404)
+  const resultsModal = document.getElementById('searchResultsModal');
+  const list = document.getElementById('searchResultsList');
+  list.innerHTML = '';
+  matches.forEach(m => {
+    const btn = document.createElement('button');
+    btn.className = 'pill-btn';
+    const building = m.room.startsWith('AC') ? 'Academic Complex' : 'Main Building';
+    btn.textContent = `${m.room} — ${building} · Floor ${m.floor}`;
+    btn.style.textAlign = 'left';
+    btn.addEventListener('click', () => {
+      floor = m.floor;
+      renderAll();
+      const b = m.room.startsWith('AC') ? 'AC' : 'MB';
+      setTimeout(() => openDetail(b, m.room), 80);
+      resultsModal.style.display = 'none';
+    });
+    list.appendChild(btn);
+  });
+  resultsModal.style.display = 'flex';
+});
+
+document.getElementById('closeSearchResults').addEventListener('click', () => {
+  document.getElementById('searchResultsModal').style.display = 'none';
+});
+});
+
+/* =====================================================================
+   DATA MODEL
+   All rooms start VACANT for every date/time. There is no built-in
+   timetable and no built-in faculty roster — the dean schedules
+   classes manually via the "Add class" button on a vacant tile (or
+   "Edit"/"Add another class" on one already scheduled). A single
+   room+slot can now hold MORE THAN ONE class at once (e.g. two
+   divisions or batches sharing a lab), so every manual entry is
+   stored as an ARRAY of class objects under `overrides`, keyed by
+   room + weekday + time-slot, and saved to localStorage so it
+   survives refreshes/reopening this file in the same browser. Swap
+   the localStorage calls for a real backend/DB when ready; every other
+   part of the UI only depends on the shape of the object returned by
+   lookupClass().
+===================================================================== */
+
+const FLOORS = [1,2,3,4,5,6];
+
+// Floor -> department, per the brief (2nd-4th year home floors).
+// Floor 6 = Engineering Science & Humanities, which in most curricula
+// is where the common First Year (FE) intake is taught across all
+// branches — so floor 6 rooms host rotating FE batches from every
+// department rather than one fixed department.
+// NOTE / ASSUMPTION: the brief lists 6 branches but only 6 floors with
+// 5 named to specific branches (AIDS has no dedicated floor). AIDS is
+// grouped onto the 5th (Computer Science) floor here — change
+// FLOOR_DEPT below if AIDS should sit elsewhere.
+const FLOOR_DEPT = {1:'ELE', 2:'MECH', 3:'ENTC', 4:'IT', 5:'CS', 6:'ESH'};
+const FLOOR_SHORT = {1:'Electrical', 2:'Mechanical', 3:'ENTC', 4:'IT', 5:'Computer', 6:'FE / Humanities'};
+
+const DEPTS = {
+  ELE:{name:'Electrical Engineering'},
+  MECH:{name:'Mechanical Engineering'},
+  ENTC:{name:'Electronics & Telecommunication'},
+  IT:{name:'Information Technology'},
+  CS:{name:'Computer Science'},
+  AIDS:{name:'Artificial Intelligence & Data Science'},
+  ESH:{name:'Engineering Science & Humanities'}
+};
+
+const DIVISIONS = ['A','B','C','Full Class'];
+const YEAR_NAMES = {FE:'First Year', SE:'Second Year', TE:'Third Year', BE:'Fourth Year'};
+const YEAR_BATCH_PREFIX = {FE:'FY', SE:'SY', TE:'TY', BE:'BE'};
+
+// Teaching slots (minutes since midnight). Breaks and off-hours are
+// handled separately in getStatus().
+const SLOTS = [
+  {start:480, end:540},   // 08:00–09:00
+  {start:540, end:600},   // 09:00–10:00
+  {start:615, end:675},   // 10:15–11:15
+  {start:675, end:735},   // 11:15–12:15
+  {start:780, end:840},   // 13:00–14:00
+  {start:840, end:900},   // 14:00–15:00
+  {start:915, end:975},   // 15:15–16:15
+  {start:975, end:1035},  // 16:15–17:15
+];
+const BREAKS = [
+  {start:600, end:615, label:'Short Break'},
+  {start:735, end:780, label:'Lunch Break'},
+  {start:900, end:915, label:'Short Break'}
+];
+const SAT_CUTOFF = 735; // Saturday classes only run through the 11:15–12:15 slot
+
+function fmtHM(mins){
+  const h = Math.floor(mins/60), m = mins%60;
+  const suf = h>=12 ? 'PM':'AM';
+  let h12 = h%12; if(h12===0) h12=12;
+  return `${h12}:${String(m).padStart(2,'0')} ${suf}`;
+}
+function slotLabel(s){ return `${fmtHM(s.start)} – ${fmtHM(s.end)}`; }
+
+/* ---------- room layout ---------- */
+function acRooms(floor){
+  return [1,2,3,4].map(n => `AC${floor}0${n}`);
+}
+function mbRooms(floor){
+  const out = [];
+  for(let n=1;n<=14;n++){
+    out.push(`MB${floor}${String(n).padStart(2,'0')}`);
+    // Two extra rooms squeezed in on every floor: one right after room
+    // 07 (e.g. MB407A) and one right after room 08 (e.g. MB408B).
+    if(n === 7) out.push(`MB${floor}07A`);
+    if(n === 8) out.push(`MB${floor}08B`);
+  }
+  return out;
+}
+
+/* ---------- core lookup ---------- */
+function getStatus(building, floor, room, date){
+  const dow = date.getDay(); // 0 Sun .. 6 Sat
+  const mins = date.getHours()*60 + date.getMinutes();
+
+  if(dow === 0) return {status:'closed', message:'Sunday — campus closed.'};
+  if(mins < 480) return {status:'closed', message:'Before college hours — opens 8:00 AM.'};
+  if(dow === 6 && mins >= SAT_CUTOFF) return {status:'closed', message:'Saturday is a half-day — campus closes at 12:15 PM.'};
+  if(dow !== 6 && mins >= 1035) return {status:'closed', message:'After college hours — closed at 5:15 PM.'};
+
+  for(const b of BREAKS){
+    if(mins >= b.start && mins < b.end) return {status:'break', message:b.label, breakInfo:b};
+  }
+
+  for(const s of SLOTS){
+    if(mins >= s.start && mins < s.end){
+      if(dow === 6 && s.start >= SAT_CUTOFF) return {status:'closed', message:'Saturday is a half-day — campus closes at 12:15 PM.'};
+      return lookupClass(building, floor, room, dow, s);
+    }
+  }
+  return {status:'closed', message:'Outside scheduled hours.'};
+}
+
+// Manual entries made by the dean via "Add class" / "Add another
+// class" / "Edit class details" in the detail panel. Keyed by the same
+// seed used to identify a room + weekday + slot. Each seed now maps to
+// an ARRAY of class objects — a room can host more than one class at
+// the same time (e.g. two divisions splitting a lab), so nothing is
+// auto-generated and nothing is overwritten when a second class is
+// added to an already-occupied slot. Persisted to the browser's
+// localStorage so the schedule survives a page refresh or closing/
+// reopening the file — it stays tied to this browser + device (swap
+// for a real backend/DB if you need it shared across devices/users).
+const STORAGE_KEY = 'academicSupervisionOverrides_v1';
+let overrides = {};
+let serverAvailable = false;
+
+// Try to load overrides from the server; fallback to localStorage.
+async function loadOverridesFromServer(){
+  try{
+    const resp = await fetch('/api/overrides');
+    if(!resp.ok) throw new Error('no server');
+    const data = await resp.json();
+    if(data && typeof data === 'object'){
+      overrides = data;
+      serverAvailable = true;
+      return true;
+    }
+  }catch(e){ serverAvailable = false; }
+  // fallback to localStorage
+  try { const saved = localStorage.getItem(STORAGE_KEY); if(saved) overrides = JSON.parse(saved); } catch(e){ overrides = {}; }
+  return false;
+}
+
+async function saveOverridesToServer(){
+  try{
+    const resp = await fetch('/api/overrides', {method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify(overrides)});
+    if(resp.ok){ serverAvailable = true; return true; }
+  }catch(e){ serverAvailable = false; }
+  // fallback
+  try{ localStorage.setItem(STORAGE_KEY, JSON.stringify(overrides)); }catch(e){}
+  return false;
+}
+
+// Persist overrides: attempt server, fallback to localStorage
+function persistOverrides(){ saveOverridesToServer(); }
+
+// Poll server for updates so changes on other roles/devices are picked up
+async function pollServerUpdates(){
+  if(!serverAvailable) return;
+  try{
+    const resp = await fetch('/api/overrides');
+    if(!resp.ok) return;
+    const data = await resp.json();
+    const newStr = JSON.stringify(data || {});
+    const oldStr = JSON.stringify(overrides || {});
+    if(newStr !== oldStr){ overrides = data || {}; renderAll(); }
+  }catch(e){ /* ignore */ }
+}
+setInterval(pollServerUpdates, 5000);
+
+// Migrate any older single-object seeds to arrays
+function migrateOverrides(){
+  try{
+    let migrated = false;
+    Object.keys(overrides).forEach(seed => {
+      if(overrides[seed] && !Array.isArray(overrides[seed])){ overrides[seed] = [overrides[seed]]; migrated = true; }
+    });
+    if(migrated) persistOverrides();
+  }catch(e){}
+}
+function seedKey(building, floor, room, dow, slotStart){
+  return `${building}-${floor}-${room}-${dow}-${slotStart}`;
+}
+
+function lookupClass(building, floor, room, dow, slot){
+  const seed = seedKey(building, floor, room, dow, slot.start);
+  const classes = overrides[seed];
+  if(classes && classes.length){
+    return {status:'occupied', slot, edited:true, classes};
+  }
+  return {status:'vacant', slot};
+}
+
+// Adds a new class to a room+slot without disturbing any class(es)
+// already scheduled there.
+function addClassOverride(building, floor, room, dow, slot, data){
+  const seed = seedKey(building, floor, room, dow, slot.start);
+  if(!overrides[seed]) overrides[seed] = [];
+  overrides[seed].push(data);
+  persistOverrides();
+}
+// Replaces one specific class (by index) within a room+slot's list,
+// leaving any other classes sharing that slot untouched.
+function updateClassOverride(building, floor, room, dow, slot, index, data){
+  const seed = seedKey(building, floor, room, dow, slot.start);
+  if(!overrides[seed]) overrides[seed] = [];
+  overrides[seed][index] = data;
+  persistOverrides();
+}
+// Removes one specific class (by index) from a room+slot's list.
+function removeClassOverride(building, floor, room, dow, slot, index){
+  const seed = seedKey(building, floor, room, dow, slot.start);
+  if(!overrides[seed]) return;
+  overrides[seed].splice(index, 1);
+  if(overrides[seed].length === 0) delete overrides[seed];
+  persistOverrides();
+}
+
+function nextOccupied(building, floor, room, date){
+  const dow = date.getDay();
+  if(dow === 0) return null;
+  const mins = date.getHours()*60 + date.getMinutes();
+  for(const s of SLOTS){
+    if(s.start <= mins) continue;
+    if(dow === 6 && s.start >= SAT_CUTOFF) break;
+    const info = lookupClass(building, floor, room, dow, s);
+    if(info.status === 'occupied') return info;
+  }
+  return null;
+}
+
+/* =====================================================================
+   STATE & DOM
+===================================================================== */
+let floor = 1;
+let liveMode = true;
+let current = new Date();
+let viewMode = 'floor'; // 'floor' | 'empty'
+let selectedRoom = null;   // {building, room}
+let editMode = false;
+let editingIndex = null;   // index into classes[] being edited, or null when adding a new class
+let lastMinuteKey = null;
+
+const el = id => document.getElementById(id);
+const dateInput = el('dateInput'), timeInput = el('timeInput');
+
+function isoDate(d){ return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`; }
+function isoTime(d){ return `${String(d.getHours()).padStart(2,'0')}:${String(d.getMinutes()).padStart(2,'0')}`; }
+function syncInputsFromDate(d){ dateInput.value = isoDate(d); timeInput.value = isoTime(d); }
+function composeDateFromInputs(){
+  const [y,m,day] = dateInput.value.split('-').map(Number);
+  const [hh,mm] = timeInput.value.split(':').map(Number);
+  return new Date(y, m-1, day, hh, mm, 0);
+}
+
+const DAY_NAMES = ['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'];
+const MONTH_NAMES = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+
+const ICON_CHECK = `<svg class="status-icon" width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="m9 12 2 2 4-4"/></svg>`;
+const ICON_AMBER = `<svg class="status-icon" width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 8v4l3 2"/></svg>`;
+const ICON_LOCK = `<svg class="status-icon" width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="10" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>`;
+const ICON_LAYERS = `<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m12 2 9 5-9 5-9-5 9-5Z"/><path d="m3 12 9 5 9-5"/><path d="m3 17 9 5 9-5"/></svg>`;
+const ICON_BUILDING = `<svg class="sicon" width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="2" width="16" height="20" rx="1"/><path d="M9 22v-4h6v4M9 7h1M14 7h1M9 11h1M14 11h1M9 15h1M14 15h1"/></svg>`;
+
+function renderClock(){
+  el('nowLabel').innerHTML = `${DAY_NAMES[current.getDay()]}, ${MONTH_NAMES[current.getMonth()]} ${current.getDate()}, ${current.getFullYear()} at ${fmtHM(current.getHours()*60+current.getMinutes())} <span>${liveMode ? '· Live' : '· Viewing selected time'}</span>`;
+  el('nowBtn').classList.toggle('active', liveMode);
+}
+
+function renderFloorTabs(){
+  const wrap = el('floorTabs');
+  wrap.innerHTML = '';
+  FLOORS.forEach(f => {
+    const btn = document.createElement('button');
+    btn.className = 'floor-tab' + (f === floor ? ' active' : '');
+    btn.innerHTML = `<span class="l1">Floor ${f}</span><span class="l2">${FLOOR_SHORT[f]}</span>`;
+    btn.addEventListener('click', () => { floor = f; renderMain(); renderFloorTabs(); renderBanner(); });
+    wrap.appendChild(btn);
+  });
+}
+
+function renderBanner(){
+  const dept = FLOOR_DEPT[floor];
+  const deptName = DEPTS[dept].name + (dept==='CS' ? ' & AIDS' : '');
+  el('banner').innerHTML = `
+    <div class="banner-icon">${ICON_LAYERS}</div>
+    <div>
+      <h2>Floor ${floor}</h2>
+      <p>${deptName}</p>
+    </div>
+  `;
+}
+
+function tileHTML(building, room, info){
+  if(info.status === 'occupied'){
+    const classes = info.classes;
+    const primary = classes[0];
+    const who = classes.length > 1 ? `${classes.length} classes in this room` : primary.teacher;
+    const subj = classes.length > 1
+      ? classes.map(c => `${c.subject} (${c.div === 'Full Class' ? 'Full' : c.div})`).join(' • ')
+      : primary.subject;
+    return `
+      <div class="tile-top">
+        <span class="tile-room">${room}</span>
+        ${classes.length > 1 ? `<span class="count-badge">${classes.length}</span>` : `<span class="status-dot"></span>`}
+      </div>
+      <div class="who">${who}</div>
+      <div class="subj">${subj}</div>
+      <div class="time">${slotLabel(info.slot)}</div>
+    `;
+  }
+  if(info.status === 'vacant'){
+    return `
+      <div class="tile-top"><span class="tile-room">${room}</span>${ICON_CHECK}</div>
+      <div class="tile-sub">Available</div>
+    `;
+  }
+  if(info.status === 'break'){
+    return `
+      <div class="tile-top"><span class="tile-room">${room}</span>${ICON_AMBER}</div>
+      <div class="tile-sub">${info.message}</div>
+    `;
+  }
+  return `
+    <div class="tile-top"><span class="tile-room">${room}</span>${ICON_LOCK}</div>
+    <div class="tile-sub">Closed</div>
+  `;
+}
+
+function makeTileButton(building, room){
+  const info = getStatus(building, floor, room, current);
+  const btn = document.createElement('button');
+  btn.className = `tile ${info.status}`;
+  btn.innerHTML = tileHTML(building, room, info);
+  btn.addEventListener('click', () => openDetail(building, room));
+  return {btn, info};
+}
+
+function renderFloorView(){
+  const ac = acRooms(floor), mb = mbRooms(floor);
+  const main = el('mainContent');
+  main.innerHTML = `
+    <section class="section">
+      <div class="section-head">${ICON_BUILDING}<h3>Academic Complex (AC)</h3><span class="tag">Classrooms</span></div>
+      <div class="room-grid" id="acGrid"></div>
+    </section>
+    <section class="section">
+      <div class="section-head">${ICON_BUILDING}<h3>Main Building (MB)</h3><span class="tag">Laboratories</span></div>
+      <div class="room-grid" id="mbGrid"></div>
+    </section>
+  `;
+  const acGrid = el('acGrid'), mbGrid = el('mbGrid');
+  ac.forEach(room => { const {btn} = makeTileButton('AC', room); acGrid.appendChild(btn); });
+  mb.forEach(room => { const {btn} = makeTileButton('MB', room); mbGrid.appendChild(btn); });
+}
+
+function renderEmptyView(){
+  const ac = acRooms(floor), mb = mbRooms(floor);
+  const main = el('mainContent');
+  main.innerHTML = `
+    <section class="section">
+      <div class="section-head">${ICON_BUILDING}<h3>Academic Complex (AC)</h3><span class="tag">Classrooms — Vacant only</span></div>
+      <div class="room-grid" id="acGrid"></div>
+    </section>
+    <section class="section">
+      <div class="section-head">${ICON_BUILDING}<h3>Main Building (MB)</h3><span class="tag">Laboratories — Vacant only</span></div>
+      <div class="room-grid" id="mbGrid"></div>
+    </section>
+  `;
+  const acGrid = el('acGrid'), mbGrid = el('mbGrid');
+  let acVacant = 0, mbVacant = 0;
+  ac.forEach(room => {
+    const info = getStatus('AC', floor, room, current);
+    if(info.status === 'vacant'){ const {btn} = makeTileButton('AC', room); acGrid.appendChild(btn); acVacant++; }
+  });
+  mb.forEach(room => {
+    const info = getStatus('MB', floor, room, current);
+    if(info.status === 'vacant'){ const {btn} = makeTileButton('MB', room); mbGrid.appendChild(btn); mbVacant++; }
+  });
+  if(acVacant === 0) acGrid.innerHTML = `<div class="empty-msg">No vacant classrooms on this floor at the selected time.</div>`;
+  if(mbVacant === 0) mbGrid.innerHTML = `<div class="empty-msg">No vacant labs on this floor at the selected time.</div>`;
+}
+
+function renderMain(){
+  if(viewMode === 'floor') renderFloorView(); else renderEmptyView();
+}
+
+/* ---------- edit form helpers ---------- */
+function deptOptions(selectedCode){
+  return Object.keys(DEPTS).map(code => `<option value="${code}" ${code===selectedCode?'selected':''}>${DEPTS[code].name}</option>`).join('');
+}
+function yearOptions(selectedCode){
+  return Object.keys(YEAR_NAMES).map(code => `<option value="${code}" ${code===selectedCode?'selected':''}>${YEAR_NAMES[code]}</option>`).join('');
+}
+function divOptions(selectedDiv){
+  return DIVISIONS.map(d => `<option value="${d}" ${d===selectedDiv?'selected':''}>${d==='Full Class' ? 'Full Class' : 'Div '+d}</option>`).join('');
+}
+function batchOptions(yearCode, selectedBatch){
+  const prefix = YEAR_BATCH_PREFIX[yearCode] || 'FY';
+  return [1,2,3].map(n => {
+    const val = `${prefix}-${n}`;
+    return `<option value="${val}" ${val===selectedBatch?'selected':''}>${val}</option>`;
+  }).join('');
+}
+function slotOptions(selectedStart){
+  return SLOTS.map(s => `<option value="${s.start}" ${s.start===selectedStart?'selected':''}>${slotLabel(s)}</option>`).join('');
+}
+function dayOptions(selectedDow){
+  // Campus is closed Sunday, so only Monday(1)–Saturday(6) are offered.
+  return [1,2,3,4,5,6].map(d => `<option value="${d}" ${d===selectedDow?'selected':''}>${DAY_NAMES[d]}</option>`).join('');
+}
+// Shared form for "edit an existing class", "add a class to a vacant
+// slot", and "add another class alongside one that's already here".
+// `seedInfo` supplies the slot to default the Time Slot dropdown to;
+// `existing` (optional) is the specific class object being edited, used
+// to pre-fill fields — when absent (adding new) fields default blank/
+// sensible. Subject and Faculty are always blank/free-text inputs —
+// there is no built-in subject or faculty roster to pre-populate from.
+// The dean can still change Day/Time Slot here to move a class, or to
+// place a new class in a different slot than the one they opened from.
+function editFormMarkup(seedInfo, existing, isNew){
+  const currentDeptCode = existing ? existing.deptCode : FLOOR_DEPT[floor];
+  const currentYear = (existing && existing.year) || 'SE';
+  const currentDiv = (existing && existing.div) || 'A';
+  const currentBatch = (existing && existing.batch) || `${YEAR_BATCH_PREFIX[currentYear] || 'FY'}-1`;
+  const currentSlotStart = (seedInfo.slot && seedInfo.slot.start) || SLOTS[0].start;
+  const currentDow = current.getDay() >= 1 && current.getDay() <= 6 ? current.getDay() : 1;
+  const subjectVal = ((existing && existing.subject) || '').replace(/"/g,'&quot;');
+  const facultyVal = ((existing && existing.teacher) || '').replace(/"/g,'&quot;');
+  return `
+    <div class="d-plate occupied">${isNew ? 'Add a class to this slot' : 'Editing this class'}</div>
+    <div class="d-field"><div class="d-label">Day</div><select id="editDay">${dayOptions(currentDow)}</select></div>
+    <div class="d-field"><div class="d-label">Time Slot</div><select id="editSlot">${slotOptions(currentSlotStart)}</select></div>
+    <div class="d-field"><div class="d-label">Department / Branch</div><select id="editDept">${deptOptions(currentDeptCode)}</select></div>
+    <div class="d-field"><div class="d-label">Year</div><select id="editYear">${yearOptions(currentYear)}</select></div>
+    <div class="d-field"><div class="d-label">Batch</div><select id="editBatch">${batchOptions(currentYear, currentBatch)}</select></div>
+    <div class="d-field"><div class="d-label">Division</div><select id="editDiv">${divOptions(currentDiv)}</select></div>
+    <div class="d-field"><div class="d-label">Subject</div><input type="text" id="editSubject" placeholder="e.g. Data Structures" value="${subjectVal}"></div>
+    <div class="d-field"><div class="d-label">Faculty</div><input type="text" id="editFaculty" placeholder="e.g. Dr. A. Sharma" value="${facultyVal}"></div>
+    <div class="d-nav"><button id="saveEditBtn">${isNew ? 'Add class' : 'Save changes'}</button><button id="cancelEditBtn">Cancel</button></div>
+  `;
+}
+
+function classCardMarkup(c, idx){
+  return `
+    <div class="class-card">
+      <div class="class-card-head"><span class="cc-index">Class ${idx+1} of this slot</span></div>
+      <div class="d-field"><div class="d-label">Department</div><div class="d-value">${c.deptName}</div></div>
+      <div class="d-field"><div class="d-label">Year &amp; Division</div><div class="d-value">${c.yearName}, ${c.div === 'Full Class' ? 'Full Class' : 'Div ' + c.div}</div></div>
+      ${c.batch ? `<div class="d-field"><div class="d-label">Batch</div><div class="d-value">${c.batch}</div></div>` : ''}
+      <div class="d-field"><div class="d-label">Subject</div><div class="d-value">${c.subject}</div></div>
+      <div class="d-field"><div class="d-label">Faculty</div><div class="d-value">${c.teacher}</div></div>
+      <div class="class-card-actions">
+        <button class="edit-class-btn" data-idx="${idx}">Edit</button>
+        <button class="remove-btn remove-class-btn" data-idx="${idx}">Remove</button>
+      </div>
+    </div>
+  `;
+}
+
+function renderDetail(){
+  if(!selectedRoom) return;
+  const {building, room} = selectedRoom;
+  const info = getStatus(building, floor, room, current);
+  const content = el('detailContent');
+  let body = '';
+
+  if(info.status === 'occupied'){
+    if(editMode){
+      const existing = editingIndex !== null ? info.classes[editingIndex] : null;
+      body = editFormMarkup(info, existing, editingIndex === null);
+    } else {
+      body = `
+        <div class="d-plate occupied">In Session${info.classes.length > 1 ? ` · ${info.classes.length} classes sharing this room` : ''}</div>
+        <div class="d-field"><div class="d-label">Time Slot</div><div class="d-value">${slotLabel(info.slot)}</div></div>
+        ${info.classes.map((c, idx) => classCardMarkup(c, idx)).join('')}
+        <div class="d-nav"><button id="addAnotherBtn">+ Add another class to this slot</button></div>
+      `;
+    }
+  } else if(info.status === 'vacant'){
+    if(editMode){
+      body = editFormMarkup(info, null, true);
+    } else {
+      const nxt = nextOccupied(building, floor, room, current);
+      body = `
+        <div class="d-plate vacant">Vacant</div>
+        <div class="d-msg">No lecture is scheduled in this room for the ${slotLabel(info.slot)} slot. It is free for use.</div>
+        ${nxt ? `<div class="d-next">Next scheduled class: <b>${slotLabel(nxt.slot)}</b><br>${nxt.classes.map(c=>`${c.subject} — ${c.teacher}`).join('<br>')}</div>` : `<div class="d-next">No further classes scheduled here for the rest of the day.</div>`}
+        <div class="d-nav"><button id="addClassBtn">+ Add class to this slot</button></div>
+      `;
+    }
+  } else if(info.status === 'break'){
+    body = `<div class="d-plate break">On Break</div><div class="d-msg">${info.message} — classes resume shortly.</div>`;
+  } else {
+    body = `<div class="d-plate closed">Closed</div><div class="d-msg">${info.message}</div>`;
+  }
+
+  content.innerHTML = `
+    <div class="d-room">${room}</div>
+    <div class="d-dept">${building === 'AC' ? 'Classroom' : 'Lab'} · Floor ${floor} · ${DEPTS[FLOOR_DEPT[floor]].name}</div>
+    ${body}
+    <div class="d-nav">
+      <button id="prevSlot">‹ Previous slot</button>
+      <button id="nextSlot">Next slot ›</button>
+    </div>
+    <hr class="d-hr">
+    <div class="d-controls-label">Check another date &amp; time</div>
+    <div class="d-inputs">
+      <input type="date" id="dDate" value="${isoDate(current)}">
+      <input type="time" id="dTime" value="${isoTime(current)}">
+    </div>
+  `;
+
+  if(!editMode){
+    el('prevSlot') && el('prevSlot').addEventListener('click', () => stepSlot(-1));
+    el('nextSlot') && el('nextSlot').addEventListener('click', () => stepSlot(1));
+    el('dDate') && el('dDate').addEventListener('change', e => { liveMode = false; setDateKeepTime(e.target.value); });
+    el('dTime') && el('dTime').addEventListener('change', e => { liveMode = false; setTimeKeepDate(e.target.value); });
+  }
+
+  if(editMode){
+    // Batch options depend on the selected Year (FY-1/2/3, SY-1/2/3,
+    // TY-1/2/3, BE-1/2/3) — refresh them whenever Year changes.
+    el('editYear') && el('editYear').addEventListener('change', () => {
+      const newYear = el('editYear').value;
+      el('editBatch').innerHTML = batchOptions(newYear, `${YEAR_BATCH_PREFIX[newYear] || 'FY'}-1`);
+    });
+  }
+
+  if(info.status === 'occupied' && !editMode){
+    el('addAnotherBtn') && el('addAnotherBtn').addEventListener('click', () => { editingIndex = null; editMode = true; renderDetail(); });
+    content.querySelectorAll('.edit-class-btn').forEach(btn => {
+      btn.addEventListener('click', () => { editingIndex = Number(btn.dataset.idx); editMode = true; renderDetail(); });
+    });
+    content.querySelectorAll('.remove-class-btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        const idx = Number(btn.dataset.idx);
+        removeClassOverride(building, floor, room, current.getDay(), info.slot, idx);
+        editingIndex = null;
+        editMode = false;
+        renderAll();
+      });
+    });
+  }
+
+  if(editMode){
+    el('saveEditBtn').addEventListener('click', () => {
+      const deptCode = el('editDept').value;
+      const yearCode = el('editYear').value;
+      const batch = el('editBatch').value;
+      const div = el('editDiv').value;
+      const fallbackSubject = (info.status === 'occupied' && editingIndex !== null) ? info.classes[editingIndex].subject : 'Untitled Class';
+      const fallbackTeacher = (info.status === 'occupied' && editingIndex !== null) ? info.classes[editingIndex].teacher : 'TBD';
+      const subject = el('editSubject').value.trim() || fallbackSubject;
+      const teacher = el('editFaculty').value.trim() || fallbackTeacher;
+      const chosenStart = Number(el('editSlot').value);
+      const chosenSlot = SLOTS.find(s => s.start === chosenStart) || info.slot;
+      const chosenDow = Number(el('editDay').value);
+      const originalDow = current.getDay();
+      const data = {
+        deptName: DEPTS[deptCode].name, deptCode,
+        year: yearCode, yearName: YEAR_NAMES[yearCode],
+        batch, div, subject, teacher
+      };
+
+      if(editingIndex !== null){
+        // Editing an existing class. If day/slot changed, remove it
+        // from the old seed and add it fresh at the new one (leaving
+        // any other classes at the old slot untouched); otherwise just
+        // update it in place so sibling classes in the same slot are
+        // unaffected.
+        if(chosenDow !== originalDow || chosenSlot.start !== info.slot.start){
+          removeClassOverride(building, floor, room, originalDow, info.slot, editingIndex);
+          addClassOverride(building, floor, room, chosenDow, chosenSlot, data);
+        } else {
+          updateClassOverride(building, floor, room, originalDow, info.slot, editingIndex, data);
+        }
+      } else {
+        // Adding a new class — always appended, never overwrites
+        // whatever else is already scheduled in that room+slot.
+        addClassOverride(building, floor, room, chosenDow, chosenSlot, data);
+      }
+      editMode = false;
+      editingIndex = null;
+      renderAll();
+    });
+    el('cancelEditBtn').addEventListener('click', () => { editMode = false; editingIndex = null; renderDetail(); });
+  }
+
+  if(info.status === 'vacant' && !editMode){
+    el('addClassBtn') && el('addClassBtn').addEventListener('click', () => { editingIndex = null; editMode = true; renderDetail(); });
+  }
+}
+
+function stepSlot(dir){
+  liveMode = false;
+  const mins = current.getHours()*60 + current.getMinutes();
+  let idx = SLOTS.findIndex(s => mins >= s.start && mins < s.end);
+  if(idx === -1) idx = dir > 0 ? -1 : SLOTS.length;
+  let newIdx = Math.max(0, Math.min(SLOTS.length-1, idx + dir));
+  const target = SLOTS[newIdx];
+  current = new Date(current.getFullYear(), current.getMonth(), current.getDate(), Math.floor(target.start/60), target.start%60, 0);
+  syncInputsFromDate(current);
+  renderAll();
+}
+function setDateKeepTime(val){
+  const [y,m,d] = val.split('-').map(Number);
+  current = new Date(y, m-1, d, current.getHours(), current.getMinutes(), 0);
+  syncInputsFromDate(current);
+  renderAll();
+}
+function setTimeKeepDate(val){
+  const [hh,mm] = val.split(':').map(Number);
+  current = new Date(current.getFullYear(), current.getMonth(), current.getDate(), hh, mm, 0);
+  syncInputsFromDate(current);
+  renderAll();
+}
+
+function openDetail(building, room){
+  selectedRoom = {building, room};
+  editMode = false;
+  editingIndex = null;
+  el('detailPanel').classList.add('show');
+  el('scrim').classList.add('show');
+  renderDetail();
+}
+function closeDetailPanel(){
+  el('detailPanel').classList.remove('show');
+  el('scrim').classList.remove('show');
+  selectedRoom = null;
+  editMode = false;
+  editingIndex = null;
+}
+
+function renderAll(){
+  renderClock();
+  renderFloorTabs();
+  renderBanner();
+  renderMain();
+  if(selectedRoom) renderDetail();
+}
+
+/* ---------- events ---------- */
+el('nowBtn').addEventListener('click', () => { liveMode = true; current = new Date(); syncInputsFromDate(current); renderAll(); });
+el('minus30Btn').addEventListener('click', () => { liveMode = false; current = new Date(current.getTime() - 30*60000); syncInputsFromDate(current); renderAll(); });
+el('plus30Btn').addEventListener('click', () => { liveMode = false; current = new Date(current.getTime() + 30*60000); syncInputsFromDate(current); renderAll(); });
+el('prevDayBtn').addEventListener('click', () => { liveMode = false; current = new Date(current.getTime() - 24*60*60000); syncInputsFromDate(current); renderAll(); });
+el('nextDayBtn').addEventListener('click', () => { liveMode = false; current = new Date(current.getTime() + 24*60*60000); syncInputsFromDate(current); renderAll(); });
+dateInput.addEventListener('change', () => { liveMode = false; current = composeDateFromInputs(); renderAll(); });
+timeInput.addEventListener('change', () => { liveMode = false; current = composeDateFromInputs(); renderAll(); });
+
+el('floorViewBtn').addEventListener('click', () => {
+  viewMode = 'floor';
+  el('floorViewBtn').classList.add('active');
+  el('emptyViewBtn').classList.remove('active');
+  renderMain();
+});
+el('emptyViewBtn').addEventListener('click', () => {
+  viewMode = 'empty';
+  el('emptyViewBtn').classList.add('active');
+  el('floorViewBtn').classList.remove('active');
+  renderMain();
+});
+
+el('closeDetail').addEventListener('click', closeDetailPanel);
+el('scrim').addEventListener('click', closeDetailPanel);
+document.addEventListener('keydown', e => { if(e.key === 'Escape') closeDetailPanel(); });
+
+/* ---------- clock ticker ---------- */
+setInterval(() => {
+  if(liveMode) current = new Date();
+  const key = `${current.getHours()}:${current.getMinutes()}`;
+  renderClock();
+  if(key !== lastMinuteKey){
+    lastMinuteKey = key;
+    renderFloorTabs();
+    renderMain();
+    if(selectedRoom) renderDetail();
+  }
+}, 1000);
+
+/* ---------- init ---------- */
+// Initialize: try server then render
+(async function init(){
+  await loadOverridesFromServer();
+  migrateOverrides();
+  syncInputsFromDate(current);
+  lastMinuteKey = `${current.getHours()}:${current.getMinutes()}`;
+  restoreRole();
+  renderAll();
+})();
+</script>
+</body>
+</html>
