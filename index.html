@@ -458,12 +458,54 @@ body.on-dashboard #topLiveBadge{
   flex-wrap:wrap; gap:12px;
 }
 .nav-back-btn{
-  background:var(--card); border:1.5px solid var(--border); font-weight:700;
-  color:var(--ink); padding:8px 15px; border-radius:9px;
-  display:inline-flex; align-items:center; gap:7px;
-  box-shadow:var(--shadow-sm);
+  background:linear-gradient(135deg, #0F172A 0%, #1E293B 100%);
+  border:2px solid #F5920E; font-weight:800;
+  color:#FFFFFF !important; padding:12px 24px; border-radius:12px;
+  font-size:15px;
+  display:inline-flex; align-items:center; gap:10px;
+  box-shadow:0 4px 14px rgba(245,146,14,0.25), 0 2px 6px rgba(15,23,42,0.3);
+  letter-spacing:-0.01em;
+  transition:all .18s cubic-bezier(0.4, 0, 0.2, 1);
+  cursor:pointer;
 }
-.nav-back-btn:hover{background:var(--bg); border-color:var(--ink);}
+.nav-back-btn svg{
+  stroke:#FDBA74 !important;
+  width:18px; height:18px;
+  transition:transform .18s ease;
+}
+.nav-back-btn span{
+  color:#FFFFFF !important;
+  font-weight:800;
+}
+.nav-back-btn:hover{
+  background:linear-gradient(135deg, #1E293B 0%, #334155 100%);
+  border-color:#FBBF24;
+  color:#FFFFFF !important;
+  transform:translateY(-2px);
+  box-shadow:0 6px 22px rgba(245,146,14,0.42), 0 4px 12px rgba(15,23,42,0.35);
+}
+.nav-back-btn:hover svg{
+  transform:translateX(-4px);
+}
+#homeNavBtn.pill-btn{
+  background:linear-gradient(135deg, #0F172A 0%, #1E293B 100%);
+  border:2px solid #F5920E; font-weight:800;
+  color:#FFFFFF !important; padding:10px 20px; border-radius:12px;
+  font-size:14px;
+  display:inline-flex; align-items:center; gap:8px;
+  box-shadow:0 3px 12px rgba(245,146,14,0.25);
+  cursor:pointer;
+  transition:all .18s ease;
+}
+#homeNavBtn.pill-btn svg{ stroke:#FDBA74 !important; width:16px; height:16px; stroke-width:2.8px; }
+#homeNavBtn.pill-btn span{ color:#FFFFFF !important; font-weight:800; }
+#homeNavBtn.pill-btn:hover{
+  background:linear-gradient(135deg, #1E293B 0%, #334155 100%);
+  border-color:#FBBF24;
+  color:#FFFFFF !important;
+  transform:translateY(-1px);
+  box-shadow:0 5px 16px rgba(245,146,14,0.4);
+}
 
 .context-pill{
   display:inline-flex; align-items:center; gap:8px; padding:6px 14px;
@@ -779,8 +821,8 @@ body.on-dashboard #topLiveBadge{
 
     <!-- Home button (visible when on dashboard) -->
     <button id="homeNavBtn" class="pill-btn" style="display:none;" title="Back to Search Options">
-      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
-      <span>Search Home</span>
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round"><path d="m15 18-6-6 6-6"/></svg>
+      <span>Back to Search Options</span>
     </button>
 
     <!-- Topbar Live Clock Indicator (shown on frontpage) -->
@@ -961,8 +1003,8 @@ body.on-dashboard #topLiveBadge{
           <select id="homeYearSelect" class="custom-select">
             <option value="">-- Choose Academic Year --</option>
             <option value="FE">First Year (FE)</option>
-            <option value="SE" selected>Second Year (SE)</option>
-            <option value="TE">Third Year (TY IT-1 &amp; TY IT-2)</option>
+            <option value="SY" selected>Second Year (SY)</option>
+            <option value="TY">Third Year (TY)</option>
             <option value="BE">Fourth Year (BE IT)</option>
           </select>
         </div>
@@ -995,14 +1037,14 @@ body.on-dashboard #topLiveBadge{
             </div>
             <select id="homeDivSelect" class="custom-select">
               <option value="ALL">All Divisions (All Academic Years)</option>
-              <optgroup label="Second Year (SE - IT)">
-                <option value="SE-ALL">All SE Divisions (SY-1, SY-2 &amp; SY-3)</option>
+              <optgroup label="Second Year (SY - IT)">
+                <option value="SY-ALL">All SY Divisions (SY-1, SY-2 &amp; SY-3)</option>
                 <option value="SY-1">Division SY-1</option>
                 <option value="SY-2" selected>Division SY-2</option>
                 <option value="SY-3">Division SY-3</option>
               </optgroup>
-              <optgroup label="Third Year (TE - IT)">
-                <option value="TE-ALL">All TE Divisions (TY IT-1 &amp; TY IT-2)</option>
+              <optgroup label="Third Year (TY - IT)">
+                <option value="TY-ALL">All TY Divisions (TY IT-1 &amp; TY IT-2)</option>
                 <option value="TY IT-1">Division TY IT-1</option>
                 <option value="TY IT-2">Division TY IT-2</option>
               </optgroup>
@@ -1085,7 +1127,7 @@ body.on-dashboard #topLiveBadge{
     <div class="dashboard-top-nav">
       <div style="display:flex; align-items:center; gap:8px; flex-wrap:wrap;">
         <button class="nav-back-btn" id="backToHomeBtn">
-          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="m15 18-6-6 6-6"/></svg>
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round"><path d="m15 18-6-6 6-6"/></svg>
           <span>Back to Search Options</span>
         </button>
 
@@ -2424,8 +2466,8 @@ const DEPTS = {
 };
 
 const DIVISIONS = ['ALL','1','2','3','TY IT-1','TY IT-2','BE IT','A','B','C','Full Class'];
-const YEAR_NAMES = {FE:'First Year', SE:'Second Year', TE:'Third Year (TY IT-1 & TY IT-2)', BE:'Fourth Year (BE IT)'};
-const YEAR_BATCH_PREFIX = {FE:'FY', SE:'SY', TE:'TY1', BE:'BE IT'};
+const YEAR_NAMES = {FE:'First Year (FE)', SY:'Second Year (SY)', TY:'Third Year (TY)', BE:'Fourth Year (BE IT)', SE:'Second Year (SY)', TE:'Third Year (TY)'};
+const YEAR_BATCH_PREFIX = {FE:'FY', SY:'SY', SE:'SY', TY:'TY1', TE:'TY1', BE:'BE IT'};
 
 const SLOTS = [
   {start:480, end:540},   // 08:00–09:00
@@ -2518,22 +2560,22 @@ function add2HourEntry(building, floor, room, dow, slot1, slot2, data){
 }
 
 function makeClass(deptCode, year, div, batch, subject, teacher){
-  let yrName = YEAR_NAMES[year] || 'Second Year';
+  let yrName = YEAR_NAMES[year] || 'Second Year (SY)';
   if(year === 'BE') yrName = 'BE IT';
-  else if(year === 'TE' || year === 'TY1' || year === 'TY2'){
+  else if(year === 'TE' || year === 'TY' || year === 'TY1' || year === 'TY2'){
     yrName = (div === 'TY IT-2' || (batch && batch.startsWith('TY2'))) ? 'Third Year (TY IT-2)' : 'Third Year (TY IT-1)';
   }
 
   let dName = div || '1';
   if(year === 'BE') dName = 'BE IT';
-  else if(year === 'TE' || year === 'TY1' || year === 'TY2'){
+  else if(year === 'TE' || year === 'TY' || year === 'TY1' || year === 'TY2'){
     dName = (div === 'TY IT-2' || (batch && batch.startsWith('TY2'))) ? 'TY IT-2' : 'TY IT-1';
   }
 
   return {
     deptCode,
     deptName: (DEPTS[deptCode] && DEPTS[deptCode].name) || 'Information Technology',
-    year,
+    year: (year === 'SE' ? 'SY' : (year === 'TE' ? 'TY' : year)),
     yearName: yrName,
     div: dName,
     batch: batch || 'Full Class',
@@ -3376,7 +3418,7 @@ function handleClassSearch(){
 
   if(!yearCode){
     if(errBox){
-      errBox.textContent = 'Step 1: Please select an Academic Year first (FE, SE, TE, or BE).';
+      errBox.textContent = 'Step 1: Please select an Academic Year first (FE, SY, TY, or BE).';
       errBox.style.display = 'block';
     }
     el('homeYearSelect').focus();
@@ -3420,8 +3462,8 @@ function handleClassSearch(){
   const prefix = YEAR_BATCH_PREFIX[yearCode] || 'SY';
   let detailsText = '';
   if(divVal && divVal !== 'ALL'){
-    if(divVal === 'SE-ALL') detailsText += ' · All Divisions (SY-1, SY-2 & SY-3)';
-    else if(divVal === 'TE-ALL') detailsText += ' · All Divisions (TY IT-1 & TY IT-2)';
+    if(divVal === 'SY-ALL' || divVal === 'SE-ALL') detailsText += ' · All Divisions (SY-1, SY-2 & SY-3)';
+    else if(divVal === 'TY-ALL' || divVal === 'TE-ALL') detailsText += ' · All Divisions (TY IT-1 & TY IT-2)';
     else if(divVal === 'FE-ALL') detailsText += ' · All Divisions (FY-1, FY-2 & FY-3)';
     else if(divVal.startsWith('SY-') || divVal.startsWith('TY') || divVal.startsWith('BE') || divVal.startsWith('FY-')) detailsText += ` · Div ${divVal}`;
     else if(divVal === '1' || divVal === '2' || divVal === '3') detailsText += ` · Div ${prefix}-${divVal}`;
@@ -3456,7 +3498,7 @@ function openTimetableRoom(building, targetFloor, room, targetDow, slotStart){
   const seed = `${building}-${targetFloor}-${room}-${targetDow}-${slotStart}`;
   const classes = (overrides && overrides[seed]) || (DEFAULT_SCHEDULE && DEFAULT_SCHEDULE[seed]) || [];
   const primary = classes[0];
-  const groupLabel = primary ? (primary.year === 'BE' ? 'BE IT' : (primary.div === 'TY IT-2' ? 'TY IT-2' : (primary.year === 'TE' || primary.div === 'TY IT-1' ? 'TY IT-1' : `IT ${primary.yearName || 'Class'}`))) : 'IT Department';
+  const groupLabel = primary ? (primary.year === 'BE' ? 'BE IT' : (primary.div === 'TY IT-2' ? 'TY IT-2' : (primary.year === 'TY' || primary.year === 'TE' || primary.div === 'TY IT-1' ? 'TY IT-1' : `IT ${primary.yearName || 'Class'}`))) : 'IT Department';
   showDashboardView({
     contextTitle: `${groupLabel} · ${room} (Floor ${targetFloor}) · ${DAY_NAMES[targetDow]} ${fmtHM(slotStart)}`
   });
@@ -3491,7 +3533,7 @@ function switchTimetableTab(tabKey){
     if(btnTY2) btnTY2.classList.add('active');
     if(cTY2) cTY2.style.display = 'block';
     if(title) title.textContent = 'MMCOE IT Department · Third Year (TY IT-2) Timetable';
-  } else if(tabKey === 'TY1' || tabKey === 'TE' || tabKey === 'ty1'){
+  } else if(tabKey === 'TY1' || tabKey === 'TY' || tabKey === 'TE' || tabKey === 'ty1'){
     if(btnTY1) btnTY1.classList.add('active');
     if(cTY1) cTY1.style.display = 'block';
     if(title) title.textContent = 'MMCOE IT Department · Third Year (TY IT-1) Timetable';
@@ -3572,14 +3614,14 @@ function populateAllDivisions(selectedVal){
   if(!divSel) return;
   divSel.innerHTML = `
     <option value="ALL">All Divisions (All Academic Years)</option>
-    <optgroup label="Second Year (SE - IT)">
-      <option value="SE-ALL">All SE Divisions (SY-1, SY-2 &amp; SY-3)</option>
+    <optgroup label="Second Year (SY - IT)">
+      <option value="SY-ALL">All SY Divisions (SY-1, SY-2 &amp; SY-3)</option>
       <option value="SY-1">Division SY-1</option>
       <option value="SY-2" selected>Division SY-2</option>
       <option value="SY-3">Division SY-3</option>
     </optgroup>
-    <optgroup label="Third Year (TE - IT)">
-      <option value="TE-ALL">All TE Divisions (TY IT-1 &amp; TY IT-2)</option>
+    <optgroup label="Third Year (TY - IT)">
+      <option value="TY-ALL">All TY Divisions (TY IT-1 &amp; TY IT-2)</option>
       <option value="TY IT-1">Division TY IT-1</option>
       <option value="TY IT-2">Division TY IT-2</option>
     </optgroup>
@@ -3602,7 +3644,7 @@ function updateBatchDropdownForYear(yearCode, divCode){
   if(!batchSel) return;
   const curr = batchSel.value || 'ALL';
 
-  if(divCode === 'TY IT-1' || (yearCode === 'TE' && divCode !== 'TY IT-2')){
+  if(divCode === 'TY IT-1' || ((yearCode === 'TY' || yearCode === 'TE') && divCode !== 'TY IT-2')){
     batchSel.innerHTML = `
       <option value="ALL">All Batches (TY1-A, TY1-B &amp; TY1-C)</option>
       <option value="TY1-A">Batch TY1-A</option>
@@ -3651,16 +3693,16 @@ function updateDivDropdownForYear(yearCode){
   const currVal = divSel.value || 'SY-2';
   if(yearCode === 'BE'){
     divSel.value = 'BE IT';
-  } else if(yearCode === 'TE'){
-    if(currVal !== 'TY IT-1' && currVal !== 'TY IT-2' && currVal !== 'TE-ALL'){
-      divSel.value = 'TE-ALL';
+  } else if(yearCode === 'TY' || yearCode === 'TE'){
+    if(currVal !== 'TY IT-1' && currVal !== 'TY IT-2' && currVal !== 'TY-ALL' && currVal !== 'TE-ALL'){
+      divSel.value = 'TY-ALL';
     }
   } else if(yearCode === 'FE'){
     if(currVal !== 'FY-1' && currVal !== 'FY-2' && currVal !== 'FY-3' && currVal !== 'FE-ALL'){
       divSel.value = 'FE-ALL';
     }
-  } else if(yearCode === 'SE'){
-    if(currVal !== 'SY-1' && currVal !== 'SY-2' && currVal !== 'SY-3' && currVal !== 'SE-ALL'){
+  } else if(yearCode === 'SY' || yearCode === 'SE'){
+    if(currVal !== 'SY-1' && currVal !== 'SY-2' && currVal !== 'SY-3' && currVal !== 'SY-ALL' && currVal !== 'SE-ALL'){
       divSel.value = 'SY-2';
     }
   }
@@ -3700,6 +3742,11 @@ const DIVISION_ROOM_MAP = {
     { room: 'MB413', floor: 4, label: 'MB413 (Floor 4) — SY-3 OOPL / SRP Lab' },
     { room: 'MB414', floor: 4, label: 'MB414 (Floor 4) — SY-3 CEP / SRP Lab' }
   ],
+  'SY-ALL': [
+    { room: 'AC301', floor: 3, label: 'AC301 (Floor 3) — SY-2 Theory Classroom', isDefault: true },
+    { room: 'AC401', floor: 4, label: 'AC401 (Floor 4) — SY-1 Theory Classroom' },
+    { room: 'AC304', floor: 3, label: 'AC304 (Floor 3) — SY-3 Theory Classroom' }
+  ],
   'SE-ALL': [
     { room: 'AC301', floor: 3, label: 'AC301 (Floor 3) — SY-2 Theory Classroom', isDefault: true },
     { room: 'AC401', floor: 4, label: 'AC401 (Floor 4) — SY-1 Theory Classroom' },
@@ -3723,6 +3770,10 @@ const DIVISION_ROOM_MAP = {
     { room: 'MB408A', floor: 4, label: 'MB408A (Floor 4) — TY IT-2 DEL Lab' },
     { room: 'MB408B', floor: 4, label: 'MB408B (Floor 4) — TY IT-2 MDM Lab' },
     { room: 'MB414', floor: 4, label: 'MB414 (Floor 4) — TY IT-2 DEL Lab' }
+  ],
+  'TY-ALL': [
+    { room: 'AC301', floor: 3, label: 'AC301 (Floor 3) — TY IT-1 Theory Classroom', isDefault: true },
+    { room: 'MB401', floor: 4, label: 'MB401 (Floor 4) — TY IT-2 Theory Classroom' }
   ],
   'TE-ALL': [
     { room: 'AC301', floor: 3, label: 'AC301 (Floor 3) — TY IT-1 Theory Classroom', isDefault: true },
@@ -3782,7 +3833,7 @@ function getDivisionClassroom(yearCode, deptCode, divVal, batchVal){
 function updateClassRoomDropdown(){
   const roomSel = el('homeClassRoomSelect');
   if(!roomSel) return;
-  const yr = el('homeYearSelect') ? el('homeYearSelect').value : 'SE';
+  const yr = el('homeYearSelect') ? el('homeYearSelect').value : 'SY';
   const dept = el('homeDeptSelect') ? el('homeDeptSelect').value : 'IT';
   const div = el('homeDivSelect') ? el('homeDivSelect').value : 'SY-2';
   const batch = el('homeBatchSelect') ? el('homeBatchSelect').value : 'ALL';
@@ -3996,7 +4047,9 @@ function deptOptions(selectedCode){
   return Object.keys(DEPTS).map(code => `<option value="${code}" ${code===selectedCode?'selected':''}>${DEPTS[code].name}</option>`).join('');
 }
 function yearOptions(selectedCode){
-  return Object.keys(YEAR_NAMES).map(code => `<option value="${code}" ${code===selectedCode?'selected':''}>${YEAR_NAMES[code]}</option>`).join('');
+  const normalized = (selectedCode === 'SE' ? 'SY' : (selectedCode === 'TE' ? 'TY' : selectedCode));
+  const mainYears = ['FE', 'SY', 'TY', 'BE'];
+  return mainYears.map(code => `<option value="${code}" ${code===normalized?'selected':''}>${YEAR_NAMES[code]}</option>`).join('');
 }
 function divOptions(selectedDiv){
   return DIVISIONS.map(d => `<option value="${d}" ${d===selectedDiv?'selected':''}>${d==='Full Class' ? 'Full Class' : 'Div '+d}</option>`).join('');
@@ -4016,7 +4069,7 @@ function dayOptions(selectedDow){
 
 function editFormMarkup(seedInfo, existing, isNew){
   const currentDeptCode = existing ? existing.deptCode : FLOOR_DEPT[floor];
-  const currentYear = (existing && existing.year) || 'SE';
+  const currentYear = (existing && (existing.year === 'SE' ? 'SY' : (existing.year === 'TE' ? 'TY' : existing.year))) || 'SY';
   const currentDiv = (existing && existing.div) || '1';
   const currentBatch = (existing && existing.batch) || `${YEAR_BATCH_PREFIX[currentYear] || 'SY'}1-A`;
   const currentSlotStart = (seedInfo.slot && seedInfo.slot.start) || SLOTS[0].start;
@@ -4336,7 +4389,7 @@ if(homeYearSelect){
     const deptSel = el('homeDeptSelect');
     if(yr === 'FE' && deptSel){
       deptSel.value = 'ESH';
-    } else if((yr === 'SE' || yr === 'TE' || yr === 'BE') && deptSel && (!deptSel.value || deptSel.value === 'ESH')){
+    } else if((yr === 'SY' || yr === 'SE' || yr === 'TY' || yr === 'TE' || yr === 'BE') && deptSel && (!deptSel.value || deptSel.value === 'ESH')){
       deptSel.value = 'IT';
     }
     updateDivDropdownForYear(yr);
@@ -4360,14 +4413,14 @@ if(homeDivSelect){
     const deptSel = el('homeDeptSelect');
     if(!yrSel) return;
 
-    if(val === 'SY-1' || val === 'SY-2' || val === 'SY-3' || val === 'SE-ALL' || val === '1' || val === '2' || val === '3'){
-      yrSel.value = 'SE';
+    if(val === 'SY-1' || val === 'SY-2' || val === 'SY-3' || val === 'SY-ALL' || val === 'SE-ALL' || val === '1' || val === '2' || val === '3'){
+      yrSel.value = (yrSel.querySelector('option[value="SY"]') ? 'SY' : 'SE');
       if(deptSel && (!deptSel.value || deptSel.value === 'ESH')) deptSel.value = 'IT';
-      updateBatchDropdownForYear('SE', val);
-    } else if(val === 'TY IT-1' || val === 'TY IT-2' || val === 'TE-ALL'){
-      yrSel.value = 'TE';
+      updateBatchDropdownForYear('SY', val);
+    } else if(val === 'TY IT-1' || val === 'TY IT-2' || val === 'TY-ALL' || val === 'TE-ALL'){
+      yrSel.value = (yrSel.querySelector('option[value="TY"]') ? 'TY' : 'TE');
       if(deptSel) deptSel.value = 'IT';
-      updateBatchDropdownForYear('TE', val);
+      updateBatchDropdownForYear('TY', val);
     } else if(val === 'BE IT'){
       yrSel.value = 'BE';
       if(deptSel) deptSel.value = 'IT';
@@ -4560,7 +4613,7 @@ setInterval(() => {
   lastMinuteKey = `${current.getHours()}:${current.getMinutes()}`;
   restoreRole();
   initDirectoryDropdowns();
-  updateDivDropdownForYear(el('homeYearSelect') ? el('homeYearSelect').value : 'SE');
+  updateDivDropdownForYear(el('homeYearSelect') ? el('homeYearSelect').value : 'SY');
   updateClassRoomDropdown();
   renderAll();
   showFrontpageView();
